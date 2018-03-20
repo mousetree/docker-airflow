@@ -13,7 +13,7 @@ ENV TERM linux
 
 # Airflow
 ARG AIRFLOW_VERSION=1.9.0
-ARG AIRFLOW_HOME=/usr/local/airflow
+ARG AIRFLOW_HOME=/airflow
 
 # Define en_US.
 ENV LANGUAGE en_US.UTF-8
@@ -71,10 +71,12 @@ RUN set -ex \
 COPY script/entrypoint.sh /entrypoint.sh
 COPY config/airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
 
+RUN chown -R 1001:0 ${AIRFLOW_HOME} && chmod -R ug+rwx ${AIRFLOW_HOME}
+
 RUN chown -R airflow: ${AIRFLOW_HOME}
 
 EXPOSE 8080 5555 8793
 
-USER airflow
+USER 1001
 WORKDIR ${AIRFLOW_HOME}
 ENTRYPOINT ["/entrypoint.sh"]
