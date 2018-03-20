@@ -42,6 +42,15 @@ else
     REDIS_PREFIX=
 fi
 
+# Ensure that assigned uid has entry in /etc/passwd.
+
+if [ `id -u` -ge 10000 ]; then
+    cat /etc/passwd | sed -e "s/^$NB_USER:/builder:/" > /tmp/passwd
+    echo "$NB_USER:x:`id -u`:`id -g`:,,,:/home/$NB_USER:/bin/bash" >> /tmp/passwd
+    cat /tmp/passwd > /etc/passwd
+    rm /tmp/passwd
+fi
+
 wait_for_port() {
   local name="$1" host="$2" port="$3"
   local j=0

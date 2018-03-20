@@ -71,10 +71,13 @@ RUN set -ex \
 COPY script/entrypoint.sh /entrypoint.sh
 COPY config/airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
 
-RUN chown -R 1001:0 ${AIRFLOW_HOME} && chmod -R ug+rwx ${AIRFLOW_HOME}
+# Adjust permissions on /etc/passwd so writable by group root.
+RUN chmod g+w /etc/passwd
+
+RUN chown -R 1002610000:0 ${AIRFLOW_HOME} && chmod -R ug+rwx ${AIRFLOW_HOME}
 
 EXPOSE 8080 5555 8793
 
-USER 1001
+USER 1002610000
 WORKDIR ${AIRFLOW_HOME}
 ENTRYPOINT ["/entrypoint.sh"]
