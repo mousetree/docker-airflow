@@ -73,8 +73,6 @@ COPY config/airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
 
 RUN chown -R 1001:0 ${AIRFLOW_HOME} && chmod -R ug+rwx ${AIRFLOW_HOME}
 
-RUN chown -R airflow: ${AIRFLOW_HOME}
-
 EXPOSE 8080 5555 8793
 
 USER 1001
